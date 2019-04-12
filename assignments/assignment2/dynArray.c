@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "dynArray.h"
 
-/* ************************************************************************
+/*************************************************************************
 	Dynamic Array Functions
 ************************************************************************ */
 
@@ -84,7 +84,11 @@ void deleteDynArr(DynArr *v)
 void _dynArrSetCapacity(DynArr *v, int newCap)
 {
 	/* FIXME: You will write this function */
+	
+	assert (v != 0);
+	v->capacity = newCap;
 }
+
 
 /* Get the size of the dynamic array
 
@@ -110,6 +114,29 @@ int sizeDynArr(DynArr *v)
 void addDynArr(DynArr *v, TYPE val)
 {
 	/* FIXME: You will write this function */
+	
+	/*check if v is defined.*/
+	assert (v != NULL);
+	
+	/*check size issues*/
+	if (v->size == v->capacity){
+		/*double capacity*/
+		DynArr * old_ptr = v;
+		v = newDynArr(old_ptr->capacity*2);
+		
+		v->size = old_ptr->size;
+		
+		int i;
+		for (i = 0; i < old_ptr->capacity; i++){
+			v->data[i] = old_ptr->data[i];
+		}
+		
+		freeDynArr(old_ptr);
+	}
+	
+	/*now we are sure that there is space within our dynarr to fit the new val*/
+	v->data[size] = val;
+	v->size++;
 }
 
 /*	Get an element from the dynamic array from a specified position
@@ -180,6 +207,15 @@ void swapDynArr(DynArr *v, int i, int  j)
 void removeAtDynArr(DynArr *v, int idx)
 {
 	/* FIXME: You will write this function */
+	
+	assert((v != NULL) && (idx >= 0) && (idx < v->size) && (v->size > 0));
+	
+	int i;
+	for (i = idx; i < (size - 1); i++){
+		v->data[i] = v->data[i+1];
+	}
+	
+	v->size--;
 }
 
 /* ************************************************************************
@@ -211,6 +247,8 @@ int isEmptyDynArr(DynArr *v)
 void pushDynArr(DynArr *v, TYPE val)
 {
 	/* FIXME: You will write this function */
+	
+	addDynArr(v, val);
 
 }
 
@@ -238,6 +276,8 @@ TYPE topDynArr(DynArr *v)
 void popDynArr(DynArr *v)
 {
 	/* FIXME: You will write this function */
+	
+	removeAtDynArr(v, v->size-1);
 }
 
 /* ************************************************************************
