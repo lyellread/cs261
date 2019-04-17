@@ -41,35 +41,63 @@ int isBalanced(char* s)
 	stack=newDynArr(5);/*initialize stack with capacity = 5*/
 
 
-	if (s && strlen(s))
+	if (s && strlen(s)){ /*checks strlen > 0*/
 		while(1)
 		{
-			ch=nextChar(s);
-			
+			ch=nextChar(s); /*get next char*/
 			if(ch==0 || ch=='\0')
 				break;
 
  
-			if(ch=='(' || ch=='[' || ch=='{' )
+			if(ch=='(' || ch=='[' || ch=='{' ){
 				pushDynArr(stack,ch);
-			else
+			}
+			else 
 			{
-
-                        /* FIXME: You will write this part of the function */
+				
+					/* FIXME: You will write this part of the function */
+				if((ch==')' || ch==']' || ch=='}') && (sizeDynArr(stack) != 0)){
+					
+					ts = topDynArr(stack);
+					
+					if ((ch == ')' && ts == '(') ||
+						(ch == ']' && ts == '[') ||
+						(ch == '}' && ts == '{')){
+							popDynArr(stack);	
+					}
+					
+					else{
+						b=0;
+						break;
+					}
+				}
+				
+				else if ((ch==')' || ch==']' || ch=='}') && (sizeDynArr(stack) == 0)){
+					b=0;
+					break;
+				}
 
 			}
 
 		}
+	}
+		
+	if (sizeDynArr(stack) != 0){ /*unbalanced as openers still left*/
+		b = 0;
+	}
 
 
-        /* Free the memory allocated to stack, and return b=1 or b=0 */
+	/* Free the memory allocated to stack, and return b=1 or b=0 */
 
 	/* FIXME: You will write this part of the function */
+	
+	freeDynArr(stack);
+	return b;
 
 }
 
 int main(int argc, char* argv[]){
-
+	
 	char* s=argv[1];	
 	/*
 	char s[]="()+x+r*{{{((--{{[()[]]}}))}}}";	

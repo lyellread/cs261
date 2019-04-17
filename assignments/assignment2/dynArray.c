@@ -59,6 +59,8 @@ void freeDynArr(DynArr *v)
 	}
 	v->size = 0;
 	v->capacity = 0;
+	
+	free(v);
 }
 
 /* Deallocate data array and the dynamic array structure. 
@@ -89,7 +91,6 @@ void _dynArrSetCapacity(DynArr *v, int newCap)
 	v->capacity = newCap;
 }
 
-
 /* Get the size of the dynamic array
 
 	param: 	v		pointer to the dynamic array
@@ -114,29 +115,36 @@ int sizeDynArr(DynArr *v)
 void addDynArr(DynArr *v, TYPE val)
 {
 	/* FIXME: You will write this function */
-	
+		
 	/*check if v is defined.*/
 	assert (v != NULL);
 	
 	/*check size issues*/
 	if (v->size == v->capacity){
-		/*double capacity*/
-		DynArr * old_ptr = v;
-		v = newDynArr(old_ptr->capacity*2);
 		
-		v->size = old_ptr->size;
+		/*generate new data array*/
+		TYPE * new_data_array = (TYPE *) malloc(sizeof(TYPE) * v->capacity * 2);
 		
+		/*transfer all items*/
 		int i;
-		for (i = 0; i < old_ptr->capacity; i++){
-			v->data[i] = old_ptr->data[i];
+		for (i = 0; i < v->capacity; i++){
+			new_data_array[i] = v->data[i];
 		}
 		
-		freeDynArr(old_ptr);
+		/*free the old array*/
+		free(v->data);
+		
+		/*set v->data to the new array*/
+		v->data = new_data_array;
+		
+		/*update capacity*/
+		v->capacity  = v->capacity * 2;
 	}
 	
-	/*now we are sure that there is space within our dynarr to fit the new val*/
-	v->data[size] = val;
+	/*now we are safe to add a new element*/
+	v->data[v->size] = val;
 	v->size++;
+
 }
 
 /*	Get an element from the dynamic array from a specified position
@@ -211,15 +219,21 @@ void removeAtDynArr(DynArr *v, int idx)
 	assert((v != NULL) && (idx >= 0) && (idx < v->size) && (v->size > 0));
 	
 	int i;
-	for (i = idx; i < (size - 1); i++){
+	for (i = idx; i < (v->size - 1); i++){
 		v->data[i] = v->data[i+1];
 	}
 	
 	v->size--;
 }
 
-/* ************************************************************************
+/*************************************************************************
 	Stack Interface Functions
+	
+	  0   1   2   3   4   5   6   7  ...
+	.--------------------------------->
+	|   |   |   |   |   |   |   |   | LI/FO = END = SIZE
+	'--------------------------------->
+	
 ************************************************************************ */
 
 /*	Returns boolean (encoded in an int) demonstrating whether or not the 
@@ -247,7 +261,7 @@ int isEmptyDynArr(DynArr *v)
 void pushDynArr(DynArr *v, TYPE val)
 {
 	/* FIXME: You will write this function */
-	
+	assert((v!=NULL));
 	addDynArr(v, val);
 
 }
@@ -261,8 +275,8 @@ void pushDynArr(DynArr *v, TYPE val)
 */
 TYPE topDynArr(DynArr *v)
 {
-	assert((v!=NULL) && (sizeDynArr(v) > 0) );
-	return v->data[v->size-1];
+	assert((v != NULL) && (v->size > 0));
+	return getDynArr(v, v->size-1);
 }
 
 /* Removes the element on top of the stack 
@@ -276,11 +290,15 @@ TYPE topDynArr(DynArr *v)
 void popDynArr(DynArr *v)
 {
 	/* FIXME: You will write this function */
+	assert((v!=NULL) && (sizeDynArr(v) > 0));
+	
+	/*TYPE temp = getDynArr(v, v->size-1);*/
 	
 	removeAtDynArr(v, v->size-1);
+	
 }
 
-/* ************************************************************************
+/*************************************************************************
 	Bag Interface Functions
 ************************************************************************ */
 
@@ -297,6 +315,16 @@ void popDynArr(DynArr *v)
 int containsDynArr(DynArr *v, TYPE val)
 {
 	/* FIXME: You will write this function */
+	
+	assert((v != NULL) && (v->size != 0));
+	
+	int i;
+	for (i = 0; i < v->size; i++){
+		if (getDynArr(v, i) == val){
+			return i;
+		}
+	}
+	return -1;
 }
 
 /*	Removes the first occurrence of the specified value from the collection
@@ -311,5 +339,15 @@ int containsDynArr(DynArr *v, TYPE val)
 */
 void removeDynArr(DynArr *v, TYPE val)
 {
-	/* FIXME: You will write this function */	
+	/* FIXME: You will write this function */
+
+	assert((v != NULL) && (v->size != 0));
+	
+	int i;
+	for (i = 0; i < v->size; i++){
+		if (getDynArr(v, i) == val){
+			removeAtDynArr(v, i);
+			return;
+		}
+	}
 }
