@@ -103,4 +103,6 @@ int emptyBuckets(struct hashMap *ht);
  */
 float tableLoad(struct hashMap *ht);
 
+void printMap (struct hashMap * ht);
+
 # endif

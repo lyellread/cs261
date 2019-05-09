@@ -2,6 +2,8 @@
 #include "hashMap.h"
 #include "structs.h"
 #include <string.h>
+#include <assert.h>
+#include <stdio.h>
 
 int stringHash1(char * str)
 {
@@ -36,7 +38,7 @@ void initMap (struct hashMap * ht, int tableSize)
 void freeMap (struct hashMap * ht)
 {  /*write this*/
 
-	int idx
+	int idx;
 	for (idx = 0; idx < ht->tableSize; idx++){
 		if (ht->table[idx] != NULL){
 			/*need to free bucket*/
@@ -49,7 +51,7 @@ void freeMap (struct hashMap * ht)
 			}
 		}
 	}
-	free(ht->table)
+	free(ht->table);
 	
 }
 
@@ -65,10 +67,35 @@ void insertMap (struct hashMap * ht, KeyType k, ValueType v)
 	assert(idx_in_map >= 0);
 	
 	if (ht->table[idx_in_map] == NULL){
-		ht->table[idx_in_map] = (*hashLink) malloc(sizeof(hashLink*)) /*allocate a link*/
-	}		
-	
-	ht->table[idx_in_map]->value = v; /*overwrite*/
+		ht->table[idx_in_map] = (struct hashLink *) malloc(sizeof(hashLink*)); /*allocate a link*/
+		ht->table[idx_in_map]->value = v;
+		ht->table[idx_in_map]->key = k;
+		ht->table[idx_in_map]->next = NULL;
+		ht->count++;
+		return;
+	}
+	else{
+		/* there is stuff there*/
+		struct hashLink* nextlink = ht->table[idx_in_map]->next;
+		while (nextlink != NULL){
+			if (nextlink->key == k){
+				nextlink->value = v;
+				
+				/* overwrote one. Returingn*/
+				return;
+			}
+		}
+		
+		/*none with same key found*/
+		
+		nextlink = ht->table[idx_in_map]->next;
+		ht->table[idx_in_map] = (struct hashLink *) malloc(sizeof(hashLink*));
+		ht->table[idx_in_map]->next = nextlink;
+		ht->table[idx_in_map]->value = v;
+		ht->table[idx_in_map]->key = k;
+		ht->count++;
+		return;
+	}
 	
 }
 
@@ -77,8 +104,8 @@ ValueType* atMap (struct hashMap * ht, KeyType k)
 
 	int idx_in_map = stringHash2(k) % ht->tableSize;
 	
-	if (containsKey(ht, k)
-		return ht->table[idx_in_map]->value;
+	if (containsKey(ht, k))
+		return &ht->table[idx_in_map]->value;
 	else{
 		printf("ERROR. KEY NOT IN MAP");
 		return NULL;
@@ -138,6 +165,36 @@ int sizeMap (struct hashMap *ht)
 	*/	
 	
 	return ht->count;
+}
+
+void printMap(struct hashMap *ht){
+	
+	int table_idx;
+	for (table_idx = 0; table_idx < ht->tableSize; table_idx++){
+		
+		printf("[%d] => ", table_idx);
+		
+		if (ht->table[table_idx] != NULL){
+			struct hashLink * next_element = ht->table[table_idx]->next;
+			
+			printf("[v:%d] ->", ht->table[table_idx]->value);
+
+			
+			if (next_element != NULL){
+				printf("[v:%d] ->", next_element->value);
+			}
+			
+			
+			while (next_element != NULL){
+				
+				
+				next_element = ht->table[table_idx]->next;
+				printf("[v:%d] ->", next_element->value);
+				
+			}
+		}
+		printf("[NULL]\n");
+	}
 }
 
 int capacityMap(struct hashMap *ht)
