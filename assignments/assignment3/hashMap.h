@@ -40,7 +40,7 @@ void initMap (struct hashMap * ht, int tableSize);
  free all memory used for your hashMap, but do not free the pointer to ht. you
  can see why this would not work by examining main(). the hashMap passed into
  your functions was never malloc'ed, so it can't be free()'ed either.
- */
+ */ 	
 void freeMap (struct hashMap * ht);
 
 /*
@@ -103,6 +103,6 @@ int emptyBuckets(struct hashMap *ht);
  */
 float tableLoad(struct hashMap *ht);
 
-void printMap (struct hashMap * ht);
+/*void printMap (struct hashMap * ht);*/
 
 # endif

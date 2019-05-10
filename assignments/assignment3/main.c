@@ -25,47 +25,41 @@ char * getWord(FILE *file){
 		free(return_buf);
 		return NULL;
 	}
-	
-	while ((c = fgetc(file))){
+
+	fscanf(file, "%s", return_buf);
+	while ((int) return_buf[0] == 0){
 		
-		if ( c == '\n'){
-			
-			/*printf("\n<R>");*/
-			return return_buf;
-			
-		}
-		else if (c == EOF){
-			return_buf[31] = '%';
-			return return_buf;
-		}
-		else if (c == '.' || c == ';'){
-			
-			/*printf("<ignored>");*/
-			
-		}
-		else if (c == ' '){
-			
-			/*printf("<R>");*/
-			return return_buf;
-			
-		}
-		else{
-			
-			if ((int) c < 90 && (int) c != 13 && (int)c != 39){
-				c = (char)((int)c + 32);
-			}
-			return_buf[index] = c;
-			index++;
-			
-			/*printf("%c", c);*/
-			
-		}
+		fscanf(file, "%s", return_buf);
+		printf("loop-%s-", return_buf);
+
 	}
+	
+	printf("FSCANF'd into %s\n", return_buf);
+	
 	return return_buf;
 	
 }
 
 /****************************************/
+
+void print_bucket (struct hashLink * hl){
+	
+	
+	/*printf("Frequency: %d - Word: ", hl->value);*/
+	
+	/*out = sprintf(hl->key);
+	fflush(stdout);
+	printf ("\r%s:		%d\n",hl->key, hl->value);
+	fflush(stdout);
+	*/
+	
+	char buffer[32];
+	int iterator;
+	for (iterator = 0; iterator < 30; iterator++){
+		buffer[iterator] = hl->key[iterator];
+	}
+	printf("%d: %s\n", hl->value, buffer);
+}
 
 /*
 	key: summer
@@ -79,10 +73,11 @@ int main (int argc, const char * argv[]) {
 	FILE * fp;
 	char * return_val;
 	int it;
-	int printf_it;
 	int counter = 0;
-	int ht_size = 2000;
-	struct hashLink * temp_hl;
+	int ht_size = 10;
+	struct hashLink * current_hashLink;
+	
+	printf("Program Started \n\n");
 	
 	fp = fopen(argv[1], "r");
 	
@@ -90,82 +85,40 @@ int main (int argc, const char * argv[]) {
 	
 	return_val = getWord(fp);
 	
-	while (fp != NULL){
+	while (!feof(fp)){
 		
-		if (return_val[31] == '%'){
-			fclose(fp);
-			fp = NULL;
-			return_val[31] = (char)0;
-		}
-
-		if (return_val[0] > 96){
-			
-			if (containsKey (ht_pointer, return_val)){
-				/*summer already in there, with val n*/
-				int current_value = *atMap(ht_pointer, return_val);
-				current_value++;
-				insertMap(ht_pointer, return_val, current_value);
-			}
-			
-			else{
-				insertMap(ht_pointer, return_val, 1);
-			} 
-		}
-		else{ /*blank*/
-			free(return_val);
-		}
-		
+		insertMap(ht_pointer, return_val, 1);
 		return_val = getWord(fp);
-
+		
 	}
-	
-	printMap(ht_pointer);
-	printf(" == Succ\n");
 	
 	
 	for (it = 0; it < ht_size; it++){
 		
-		if (ht_pointer->table[it] != NULL){
+		current_hashLink = ht_pointer->table[it];
+		
+		if (current_hashLink!= NULL){
 			
-			
-			
+			print_bucket(current_hashLink);
 			counter++;
-			/*
-			printf("Word\n");
-			printf("[idx: %d]:\n", it);
-			*/
 			
-			for (printf_it = 0; printf_it < 31; printf_it++){
+			while (current_hashLink->next != NULL){
 				
-				printf("%c", ht_pointer->table[it]->key[printf_it]);
-			
-			}
-			
-			temp_hl = ht_pointer->table[it]->next;
-			
-			while (temp_hl != NULL){
-				
-				printf("LL/Bucket -> \n");
+				current_hashLink = current_hashLink->next;
+				print_bucket(current_hashLink);
 				counter++;
-				for (printf_it = 0; printf_it < 31; printf_it++){
 				
-					printf("%c", temp_hl->key[printf_it]);
-			
-				}
-				
-				temp_hl = temp_hl->next;
 			}
-			
-			
-			
-			printf("\n");
-			/*printf("\n*->count: %d\n\n", ht_pointer->table[it]->value);*/
-			
 		}
 	}
-	
-	printf(" == Final Succ / %d", counter);
 			
+
+	
+	printf("\nFound %d words. Quitting.\n", counter);
+			
+	freeMap(ht_pointer);
+	free(ht_pointer);
+	
 	
 	/*
 
