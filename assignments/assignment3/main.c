@@ -17,10 +17,7 @@
 char * getWord(FILE *file){
 
 	char * return_buf = malloc (32 * sizeof(char));
-	
-	char c;
-	int index = 0;
-	
+		
 	if (file == NULL){
 		free(return_buf);
 		return NULL;
@@ -30,11 +27,7 @@ char * getWord(FILE *file){
 	while ((int) return_buf[0] == 0){
 		
 		fscanf(file, "%s", return_buf);
-		printf("loop-%s-", return_buf);
-
 	}
-	
-	printf("FSCANF'd into %s\n", return_buf);
 	
 	return return_buf;
 	
@@ -58,7 +51,7 @@ void print_bucket (struct hashLink * hl){
 	for (iterator = 0; iterator < 30; iterator++){
 		buffer[iterator] = hl->key[iterator];
 	}
-	printf("%d: %s\n", hl->value, buffer);
+	printf("%s: %d\n", buffer, hl->value);
 }
 
 /*
@@ -83,15 +76,16 @@ int main (int argc, const char * argv[]) {
 	
 	initMap(ht_pointer, ht_size);
 	
-	return_val = getWord(fp);
+	/*return_val = getWord(fp);*/
 	
-	while (!feof(fp)){
-		
-		insertMap(ht_pointer, return_val, 1);
+	do{
 		return_val = getWord(fp);
+		insertMap(ht_pointer, return_val, 1);
 		
-	}
-	
+		
+	}while (!feof(fp));
+			
+	fclose(fp);
 	
 	for (it = 0; it < ht_size; it++){
 		

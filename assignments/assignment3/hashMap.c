@@ -83,7 +83,6 @@ void insertMap (struct hashMap * ht, KeyType k, ValueType v)
 
 		while (nextlink != NULL){
 			if (strcmp(nextlink->key, k) == 0){ /* cannot be ptr comparison. Need more substantial comp*/
-
 				free(k);/*key wont be used, so free*/
 				nextlink->value++;
 				/* overwrote one. Returingn*/
