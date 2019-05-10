@@ -70,14 +70,18 @@ int main (int argc, const char * argv[]) {
 	int ht_size = 10;
 	struct hashLink * current_hashLink;
 	
+	if (argc != 2){
+		printf("ERROR: ARGS NEEDED. QUITTING.");
+		free(ht_pointer);
+		exit(EXIT_FAILURE);
+	}
+	
 	printf("Program Started \n\n");
 	
 	fp = fopen(argv[1], "r");
 	
 	initMap(ht_pointer, ht_size);
-	
-	/*return_val = getWord(fp);*/
-	
+		
 	do{
 		return_val = getWord(fp);
 		insertMap(ht_pointer, return_val, 1);
@@ -113,29 +117,6 @@ int main (int argc, const char * argv[]) {
 	freeMap(ht_pointer);
 	free(ht_pointer);
 	
-	
-	/*
-
-	
-	key1 = malloc(7 * sizeof(char));
-	key1[0] = 'y';	key1[1] = 'e';	key1[2] = 'e';	key1[3] = 't';	key1[4] = 'u';	key1[5] = 's';
-	
-	
-	key2 = malloc(7 * sizeof(char));
-	key2[0] = 't';	key2[1] = 'e';	key2[2] = 'z';	key2[3] = 't';	key2[4] = '4';	key2[5] = 's';
-	
-	assert(ht_pointer != NULL);
-	
-	initMap(ht_pointer, 15);
-	
-	
-	printMap(ht_pointer);
-	
-	insertMap(ht_pointer, key1, val1);
-	insertMap(ht_pointer, key2, val2);
-	
-	printMap(ht_pointer);
-	*/
 	return 1;
 }
 
