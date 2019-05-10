@@ -25,14 +25,18 @@ char * getWord(FILE *file){
 	}
 
 	fscanf(file, "%s", return_buf);
-	while ((int) return_buf[0] == 0){
+	while (return_buf[0] == '\0' && !feof(file)){
 		
 		fscanf(file, "%s", return_buf);
 	}
 	
+	
 	for (index = 0; index < 200; index++){
 		
-		if ( return_buf[index] == '!' || return_buf[index] == '.' || return_buf[index] == '-'){
+		if (!((int) return_buf[index] < 123 && (int) return_buf[index] > 96) && 
+			!((int) return_buf[index]>64 && (int) return_buf[index] < 91) && 
+			!((int) return_buf[index] == 39) &&
+			!((int) return_buf[index] == '\0')){
 			
 			return_buf[index] = '\0';
 			
@@ -77,7 +81,7 @@ int main (int argc, const char * argv[]) {
 	char * return_val;
 	int it;
 	int counter = 0;
-	int ht_size = 200;
+	int ht_size = 20;
 	struct hashLink * current_hashLink;
 	
 	if (argc != 2){
