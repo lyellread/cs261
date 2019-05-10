@@ -16,8 +16,9 @@
  */
 char * getWord(FILE *file){
 
-	char * return_buf = malloc (32 * sizeof(char));
-		
+	char * return_buf = malloc (200 * sizeof(char));
+	int index;
+	
 	if (file == NULL){
 		free(return_buf);
 		return NULL;
@@ -27,6 +28,15 @@ char * getWord(FILE *file){
 	while ((int) return_buf[0] == 0){
 		
 		fscanf(file, "%s", return_buf);
+	}
+	
+	for (index = 0; index < 200; index++){
+		
+		if ( return_buf[index] == '!' || return_buf[index] == '.' || return_buf[index] == '-'){
+			
+			return_buf[index] = '\0';
+			
+		}
 	}
 	
 	return return_buf;
@@ -67,7 +77,7 @@ int main (int argc, const char * argv[]) {
 	char * return_val;
 	int it;
 	int counter = 0;
-	int ht_size = 10;
+	int ht_size = 200;
 	struct hashLink * current_hashLink;
 	
 	if (argc != 2){
