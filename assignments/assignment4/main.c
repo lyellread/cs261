@@ -38,6 +38,8 @@ int FindMinPath(struct AVLTree *tree, TYPE *path)
                /* Traverse the tree and find the min-cost path */
 
                /* FIX ME */
+			   
+			   
         
         }
 	return path_len;

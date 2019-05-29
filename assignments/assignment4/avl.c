@@ -150,8 +150,35 @@ struct AVLnode * _balance(struct AVLnode * current)
 struct AVLnode * AVLnodeAdd(struct	AVLnode * current, TYPE newValue)
 {
 
-
-     /* FIX ME */
+    /* FIX ME */
+	 
+	if (current == 0){
+		/* add & allocate */
+		
+		struct AVLnode * newnode = malloc(sizeof(struct AVLnode));
+		assert(newnode != NULL);
+		
+		newnode->left = NULL;
+		newnode->right = NULL;
+		
+		newnode->val = newValue;
+		newnode->height = 0;
+			
+		return newnode;
+	}
+	
+	else {
+		/* recurse through the tree */
+		if (LT(newValue, current->val)){
+			current->left = AVLnodeAdd(current->left, newValue);
+		}
+		else{
+			current->right = AVLnodeAdd(current->right, newValue);
+		}
+		
+		return balance(current);
+	
+	}
 
 
 
