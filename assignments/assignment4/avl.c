@@ -75,23 +75,39 @@ int bf(struct AVLnode * current)
 /* left-rotate subtree of current node */
 struct AVLnode * rotateLeft(struct AVLnode * current)
 {
+	
+    /* FIX ME */
+	
+	/*Note: Code from class notes == slides*/
+
+	
 	struct AVLnode * newtop = current->right;
 
-
-    /* FIX ME */
-
-
-
+	current->right = newtop->left;
+	newtop->left = current;
+	
+	setHeight(current);
+	setHeight(newtop);
+	
 	return newtop;
 }
 
 /* right-rotate subtree of current node */
 struct AVLnode * rotateRight(struct AVLnode * current)
 {
+		
+    /* FIX ME */
+	
+	/*Note: Code from class notes == slides*/
+
+
 	struct AVLnode * newtop = current->left;
 
-
-        /* FIX ME */
+	current->left = newtop->right;
+	newtop->right = current;
+	
+	setHeight(current);
+	setHeight(newtop);
 
 	return newtop;
 }
@@ -100,8 +116,6 @@ struct AVLnode * rotateRight(struct AVLnode * current)
 struct AVLnode * _balance(struct AVLnode * current)
 {
 	int cbf = bf(current);
-
-
 
        /* FIX ME */
 
