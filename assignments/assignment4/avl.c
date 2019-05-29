@@ -118,8 +118,30 @@ struct AVLnode * _balance(struct AVLnode * current)
 	int cbf = bf(current);
 
        /* FIX ME */
-
-
+	   
+	if (cbf < -1){		
+		/* [double] | [single] rotation right */
+		
+		if (bf(current->left) > 0){
+			/* double rotation */
+			current->left = rotateLeft (current->left);
+		}
+		
+		return rotateRight(current);		
+	}
+	
+	else if (cbf > 1){
+		
+		/* [double] | [single] rotation left */
+		
+		if (bf(current->right) < 0){
+			/* double rotation */
+			current->right = rotateRight (current->right);
+		}
+		
+		return rotateLeft(current);
+	}
+	
 	setHeight(current);
 	return current;
 }
