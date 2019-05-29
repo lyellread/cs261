@@ -176,7 +176,7 @@ struct AVLnode * AVLnodeAdd(struct	AVLnode * current, TYPE newValue)
 			current->right = AVLnodeAdd(current->right, newValue);
 		}
 		
-		return balance(current);
+		return _balance(current);
 	
 	}
 
