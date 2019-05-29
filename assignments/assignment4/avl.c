@@ -163,7 +163,7 @@ struct AVLnode * AVLnodeAdd(struct	AVLnode * current, TYPE newValue)
 		
 		newnode->val = newValue;
 		newnode->height = 0;
-			
+		
 		return newnode;
 	}
 	

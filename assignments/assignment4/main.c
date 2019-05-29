@@ -107,6 +107,9 @@ void printBreadthFirstTree(struct AVLTree *tree){
    /* allocate memory to queque */
    queue = (struct AVLnode **) malloc(100*sizeof(struct AVLnode));
    
+   for (int depth = 0; depth < h(tree->root); ++depth){
+	   
+	   
 
     /* FIX ME */
 
