@@ -99,21 +99,52 @@ Printing the contents of an AVL tree in breadth-first fashion
   pre: assume that tree was initialized well before calling this function
 */
 void printBreadthFirstTree(struct AVLTree *tree){
-   struct AVLnode **queue;  /* print using a queue, where queue is implemented as a static array */
-   struct AVLnode *current = tree->root;
-   int start = 0; /* start index of queue indicating the first element to be processed */
-   int end = 0;  /* end index of queue indicating the latest element added to the queue */
+	struct AVLnode **queue;  /* print using a queue, where queue is implemented as a static array */
+	struct AVLnode *current = tree->root;
+	int start = 0; /* start index of queue indicating the first element to be processed */
+	int end = 0;  /* end index of queue indicating the latest element added to the queue */
+	int i = 0;
+	
+	/* allocate memory to queque */
+	queue = (struct AVLnode **) malloc(100*sizeof(struct AVLnode));
    
-   /* allocate memory to queque */
-   queue = (struct AVLnode **) malloc(100*sizeof(struct AVLnode));
-   
-   for (int depth = 0; depth < h(tree->root); ++depth){
-	   
-	   
+	/* FIX ME */
 
-    /* FIX ME */
+	/* add the root to the top of the queue to start */
+	queue[0] = current;
+	end++;
+	
 
+	/* start the loop */
+	
+	while (LT(start, end)){
+		
+		/*remove the first elem from queue */
+		current = queue[start];
+		start++;
+		
+		/* if it has left child, add to queue */
+		if (current->left){
+			queue[end] = current->left;
+			end++;
+		}
+		
+		/* if it has right child, add to queue */
+		if (current->right){
+			queue[end] = current->right;
+			end++;
+		}
+	}
 
+	/* print that */
+	for (i = 0; i < end; ++i){
+		printf("%d, ", queue[i]->val);
+	}
+	
+	/* free memz and return */
+	free(queue);
+	
+	return;
 }
 
 
@@ -145,22 +176,8 @@ int main(int argc, char** argv) {
 	printf("\nPrinting the tree breadth-first : \n");
 	printBreadthFirstTree(tree);
 
-	gettimeofday(&start, NULL);
 
-	/* Find the minimum-cost path in the AVL tree*/
-	len = FindMinPath(tree, pathArray);
-	
-	gettimeofday(&stop, NULL);
-
-	/* Print out all numbers on the minimum-cost path */
-	printf("\nThe minimum-cost path is: \n");
-	for(i = 0; i < len; i++)
-		printf("%d ", pathArray[i]);
-	printf("\n");
-
-	printf("\nYour execution time to find the mincost path is %f microseconds\n", (double) (stop.tv_usec - start.tv_usec));
-
-        /* Free memory allocated to the tree */
+    /* Free memory allocated to the tree */
 	deleteAVLTree(tree); 
 	
 	return 0;
