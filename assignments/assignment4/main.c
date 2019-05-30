@@ -96,15 +96,7 @@ void preorder(struct AVLnode *node, TYPE *min_cost, TYPE *path, int *path_len,
 	if (!node->left && !node->right){
 		/* leaf */
 		
-		printf("\nReached Leaf:\n");
-		for (i = 0; i < *c_path_len; ++i){
-			printf("%i|", candidate_path[i]);
-		}
-		
-		/* calculate min cost path for last taken path */
-		
-		printf("->%i", sumDiff);
-		
+		/* calculate min cost path for last taken path */		
 		
 		/* compare mcp to previous min */
 		if(sumDiff < *min_cost){
