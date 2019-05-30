@@ -5,7 +5,7 @@
 #include "avl.h"
 void preorder(struct AVLnode *node, TYPE *min_cost, TYPE *path, int *m, TYPE *candidate_path, int *n, TYPE sumDiff, TYPE parent_value);
 TYPE absoluteDiff(TYPE a, TYPE b);
-int FindMinPath(struct AVLTree *tree, TYPE *path);
+int FindMinPath(struct AVLTree *tree, TYPE *path, int * cost);
 void printBreadthFirstTree(struct AVLTree *tree);
 
 
@@ -20,7 +20,7 @@ Finds the minimum-cost path in an AVL tree
        path is already allocated sufficient memory space
        tree exists and is not NULL
 */
-int FindMinPath(struct AVLTree *tree, TYPE *path)
+int FindMinPath(struct AVLTree *tree, TYPE *path, int * cost)
 {
         int path_len = 0; /* the initial length of the min-cost path */
         struct AVLnode * current = tree->root;
@@ -42,6 +42,9 @@ int FindMinPath(struct AVLTree *tree, TYPE *path)
 			   preorder(current, &min_cost, path, &path_len, candidate_path, &c_path_len, 0, current->val);
         
         }
+		
+		*cost = min_cost;
+		
 	return path_len;
 }
 
@@ -196,7 +199,7 @@ The main function
 int main(int argc, char** argv) {
 
 	FILE *file;
-	int len, i;
+	int len, i, cost;
 	TYPE num; /* value to add to the tree from a file */
 	struct timeval stop, start; /* variables for measuring execution time */
 	int pathArray[50];  /* static array with values along the min-cost path of the AVL tree */
@@ -220,16 +223,16 @@ int main(int argc, char** argv) {
 	gettimeofday(&start, NULL);
 
 	/* Find the minimum-cost path in the AVL tree*/
-	len = FindMinPath(tree, pathArray);
+	len = FindMinPath(tree, pathArray, &cost);
 	
 	gettimeofday(&stop, NULL);
 	
 	/* Print out all numbers on the minimum-cost path */
-	printf("\nThe minimum-cost path is: \n");
+	printf("\n\nThe minimum-cost path is: \n");
 	for(i = 0; i < len; i++)
 		printf("%d ", pathArray[i]);
 	printf("\n");
-
+	printf("\nThe minimum-cost of that path is: %d\n", cost);
 	printf("\nYour execution time to find the mincost path is %f microseconds\n", (double) (stop.tv_usec - start.tv_usec));
 
     /* Free memory allocated to the tree */
