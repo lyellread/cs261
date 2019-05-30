@@ -39,7 +39,7 @@ int FindMinPath(struct AVLTree *tree, TYPE *path)
 
                /* FIX ME */
 			   
-			   
+			   preorder(current, &min_cost, path, &path_len, candidate_path, &c_path_len, 0, current->val);
         
         }
 	return path_len;
@@ -61,9 +61,11 @@ TYPE absoluteDiff(TYPE a, TYPE b){
 Recursively traverses the AVL tree and finds its min cost path
 Input argument: 
      node = pointer to the current node visited by recursion,
+	 
      min_cost = the latest minimum cost, 
      path = array of values of nodes along the latest best path,
      path_len = number of elements in path array,
+	 
      candidate_path = currently considered path array
      c_path_len = number of elements in the candidate path array
      
@@ -86,10 +88,57 @@ void preorder(struct AVLnode *node, TYPE *min_cost, TYPE *path, int *path_len,
     sumDiff = sumDiff + absoluteDiff(parent_value, node->val); 
 
     /* Write the recursion case(s) and the stopping-recursion case(s) */
-
   
     /* FIX ME */
+	
+	/* check edge case of leaf reached */
+	
+	if (!node->left && !node->right){
+		/* leaf */
+		
+		printf("\nReached Leaf:\n");
+		for (i = 0; i < *c_path_len; ++i){
+			printf("%i|", candidate_path[i]);
+		}
+		
+		/* calculate min cost path for last taken path */
+		
+		printf("->%i", sumDiff);
+		
+		
+		/* compare mcp to previous min */
+		if(sumDiff < *min_cost){
+			/* we've found a new minimum bois */
+			*min_cost = sumDiff;
+			
+			*path_len = *c_path_len;
+			for (i = 0; i < *c_path_len; ++i){
+				path[i] = candidate_path[i];
+			}
+		}
+			
+		
+		/* clean up & return */		
+		return;
+	}
+	
+	/* need to recurse */
+	
+	if (node->left){
+		
+		preorder(node->left, min_cost, path, path_len, candidate_path, c_path_len, sumDiff, node->val);
+		(*c_path_len)--;	
 
+	}
+	
+	if (node->right){
+		
+		preorder(node->right, min_cost, path, path_len, candidate_path, c_path_len, sumDiff, node->val);
+		(*c_path_len)--;	
+
+	}
+
+	
 }
 
 
@@ -176,6 +225,20 @@ int main(int argc, char** argv) {
 	printf("\nPrinting the tree breadth-first : \n");
 	printBreadthFirstTree(tree);
 
+	gettimeofday(&start, NULL);
+
+	/* Find the minimum-cost path in the AVL tree*/
+	len = FindMinPath(tree, pathArray);
+	
+	gettimeofday(&stop, NULL);
+	
+	/* Print out all numbers on the minimum-cost path */
+	printf("\nThe minimum-cost path is: \n");
+	for(i = 0; i < len; i++)
+		printf("%d ", pathArray[i]);
+	printf("\n");
+
+	printf("\nYour execution time to find the mincost path is %f microseconds\n", (double) (stop.tv_usec - start.tv_usec));
 
     /* Free memory allocated to the tree */
 	deleteAVLTree(tree); 
