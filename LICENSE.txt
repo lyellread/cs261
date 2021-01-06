@@ -1,0 +1,39 @@
+             LICENSE CONCERNING THIS WORK
+             VERSION 0.1, January 5, 2021
+                     Lyell Read
+
+0. LICENSE
+
+This license is immutable and governs works composed by
+the author of certain files in this repository, as detailed 
+below.
+
+1. WHAT IS COVERED UNDER THIS LICENSE
+
+All the works produced at least in part by the author of all 
+non-attributed documents herein are covered under this license.
+These will be henceforth referred to as "Documents"
+
+2. SHARING & RE-USE
+
+Any use of any Documents presented herein, either in verbatim 
+use or use in a summary must include attribution to the author, 
+and include a copy of this license.
+
+Any use of any Documents from within this repository may not
+be shared or re-used in any manner that creates monetary gain
+or exchange.
+
+3. LEGALITY
+
+The use of Documents contained in this repository is allowed
+under the condition that it complies with all regulations, be 
+they federal, civil, academic and other that are applicable to 
+the use at hand. 
+
+4. DISCLAIMER
+
+Any Document not attributed wholly to the author of this 
+repository is not the work of the author of this repository,
+and may be covered under separate licenses and copyrights. 
+These such documents are not subject to this license.
